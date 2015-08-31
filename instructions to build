@@ -1,0 +1,22 @@
+git clone https://github.com/cloudfoundry-samples/spring-music.git
+cd spring-music/
+./gradlew war
+
+# errored out?
+./gradlew tomcatRun -Dspring.profiles.active=mongodb
+./gradlew tomcatRun -Dspring.profiles.active=redis
+
+# ran fine
+./gradlew tomcatRun -Dspring.profiles.active=in-memory
+
+curl -X GET --url http://localhost:8080/spring-music/
+
+
+to kill:
+ps -aux | grep Gradle
+kill <pid>
+
+kill $(ps aux | grep 'GradleDaemon' | awk '{print $2}')
+
+https://docs.gradle.org/current/userguide/working_with_files.html
+https://github.com/cloudfoundry-samples/spring-music
