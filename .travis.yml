@@ -5,10 +5,7 @@ before_install:
 before_deploy:
   - chmod ugo+x deploy.sh
 script:
-  - bash ./gradlew clean
-  - bash ./gradlew war
-  - bash ./gradlew copyWar
-  - bash ./gradlew zipStatic
+  - bash ./gradlew clean war copyWar zipStatic
   - bash ./deploy.sh
 env:
   global:
