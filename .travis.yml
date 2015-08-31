@@ -1,7 +1,5 @@
 language: java
-jdk:
-- oraclejdk7
-- openjdk7
+jdk: oraclejdk7
 before_deploy: chmod ugo+x deploy.sh
 script:
 - bash ./gradlew clean
