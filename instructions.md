@@ -14,9 +14,8 @@ To test
 
 To build and distribute .zip and .war  
 ```shell
-./gradlew zipStatic && \
-./gradlew war && \
-./gradlew copyWar
+bash ./gradlew clean war copyWar zipStatic && \
+bash ./deploy.sh
 ```
 
 Links  
