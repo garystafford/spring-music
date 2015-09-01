@@ -1,13 +1,13 @@
 language: java
 jdk: oraclejdk7
 before_install:
-  - chmod +x gradlew
+- chmod +x gradlew
 before_deploy:
-  - chmod ugo+x deploy.sh
+- chmod ugo+x deploy.sh
 script:
-  - bash ./gradlew clean war copyWar zipStatic
-  - bash ./deploy.sh
+- bash ./gradlew clean war copyWar zipStatic
+- bash ./deploy.sh
 env:
   global:
-    - GH_REF: github.com/garystafford/spring-music.git
-    - secure: VuOdw5BEUYSP05vshymykBlqqXWXeAZ843N9H3D2FMIHWz5BVobm6KJzdsQClIDMdWXJMYuAVtsAcudifwsH55D1V50+leMBKSsuNZh75vRQNAm8R4QLhucJCGUyj09+MFi1kHDL0Vi0n+1AON4aMR6MiMIYXNQxXnLGF0vgA8RjpusUwvaebD6Y5/voDE3TG58ELO8iIZzkAjKrgXWfp0e9Q4X+gM52FtJgpcO8Tys21GGMMi3vLXoo6DTwzb2l377HFXrlFoOfet/bWrFs/IwQ0GiEnkZ4g9Oe0vmZkixy0Zbudy0jEuDXRoDGXKpt/ydCDwjoIwo6T4xzhVO89pCowqWNcXVHdUTVBGfmcF3p6oLJUkcd8d0QNmV2OL2jcV6rW5AYAn6BTyy6uXKYYgkyTVHqwiIRasIKlQXhiXvhvNawpB5MmYrKjYe9ClEA7vVp7NIXfe03R5Foh4pjRaDCOJPMTAm0yL2YU3k5tVCTDIXbNID85NLsvd2ePyjfrhjA2hAzRd4bmPR/SF7PDsczYGTAeg7oWDVAFOpi7Snh0+dW/d1VPym2Slr9kAGRnPp3/avDxyNFGjFpGRpQu1OJFspK9y8hJJ3mtElC8dwDkVJUpgwgx8fTGF5YszxpsDJqEUV4lyBDn9nTfiNuTVjIrxozxBPSUXm+i81QK40=
+  - GH_REF: github.com/garystafford/spring-music.git
+  - secure: a9vmysUsyHe85ojVqc5+3Qq0o0z1lSwdAaUW2cFri9N4dhU73v/u4DJ9DFTJmzORpeH+QOpbnamJo+9GfHTkYNvcOqb72h2k8KUXLNdKM6zhpau5RcBcvNPYFRAap+O7/r2Rn+YrEtkk5IKF6MrE2msP5ot3f3uX7qtpOcQXkGQCLRQe39tG7zVYNy1RWTHMKJX0DLRpIVo0B//8x/vdI3PnNYSin/ijuC6kv94rcHrtomvM1DiRJvoSdgzRWjIPM6sMgu130rPxN1oxv2gJ+H78eOXSh1bj5Z2dVtC9G5863086zcQmmvWF8jluE6b9Ji7rFnyvpOLZjaAq9VK5iafqmE1g2m45XlgMTId92PIgH9BTd3C3w4JnlT6Y7sE5TzoyDIVLjWARAZlU8XFS/uNIXD4gFYdT0CcsPU8HZIqt4/eMCSMLk6mPfBeXWs3gqRSNZg8JZ7hdAVnYTq6ZZir1UZnQe+9JCmAxqmdSmEmG5ocFLpseyR1fgxPTvXisyWDwDm1TQ0rU3MhdI/A4oR3OiTGwzG9Yn8MK2Nn4QDvoWDYThXLRxRJGiN48FOwf4uWWM1FaNUwULdlAH6V602pi1OJ/Fi9D2TZIHxhWDcTXj5wfBWWpSRZM4Y4iq/A/6Un8gG38AcCAW3yqbqcrSGcOMCt1jAE/RMkpFbByi4g=
