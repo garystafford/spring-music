@@ -1,6 +1,5 @@
 package org.cloudfoundry.samples.music.config.data;
 
-import com.mongodb.MongoClient;
 import com.mongodb.MongoURI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +23,17 @@ public class MongoLocalConfig {
 //    }
     @Bean
     public MongoDbFactory mongoDbFactory() throws UnknownHostException {
-        String mongoUrl = "virtual-vehicles.com";
+        String mongoUrl = "nosqldb";
         int mongoPort = 27017;
-        String mongoDatabase = "sweetmusic";
+        String mongoDatabase = "springmusic";
+
         MongoURI mongoUri
                 = new MongoURI("mongodb://" + mongoUrl + ":"
                         + mongoPort + "/" + mongoDatabase);
         try {
             return new SimpleMongoDbFactory(mongoUri);
         } catch (UnknownHostException e) {
-            throw new RuntimeException("Error creating MongoDbFactory: " + e);
+            throw new RuntimeException("Error creating SimpleMongoDbFactory: " + e);
         }
     }
 

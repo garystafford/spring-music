@@ -4,7 +4,7 @@ https://github.com/cloudfoundry-samples/spring-music
 `git clone https://github.com/cloudfoundry-samples/spring-music.git`
 
 To run locally with Mongo  
-`./gradlew tomcatRun -Dspring.profiles.active=mongodb`
+`bash ./gradlew tomcatRun -Dspring.profiles.active=mongodb`
 
 To kill running app locally  
 `kill $(ps aux | grep 'GradleDaemon' | awk '{print $2}')`
