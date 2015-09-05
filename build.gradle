@@ -8,12 +8,16 @@ apply plugin: 'war'
 
 apply plugin: 'cloudfoundry'
 
+version = 1.0
+
 // versioning build artifacts
 def major = '1'
 def minor = "${System.env.TRAVIS_BUILD_NUMBER}"
 minor = (minor!='null') ? minor : '0'
-version = major + '.' + minor
+def artifact_version = major + '.' + minor
 
+def currentJvm = org.gradle.internal.jvm.Jvm.current()
+    
 sourceSets {
     main {
         java {
@@ -32,7 +36,9 @@ archivesBaseName = "spring-music"
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'Spring Sample Application', 'Implementation-Version': version
+        attributes \
+            'Implementation-Title': 'Spring Sample Application', \
+            'Implementation-Version': version
     }
     //version = ""
 }
@@ -121,13 +127,22 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.9'
+    gradleVersion = "${gradleVersion}"
 }
 
 war {
     // omit the version from the war file name
-    //version = ""
+    version = ""
     exclude '**/assets/**'
+    manifest {
+        attributes \
+            'Manifest-Version': '1.0', \
+            'Created-By': currentJvm, \
+            'Gradle-Version': gradleVersion, \
+            'Implementation-Title': archivesBaseName + '.war', \
+            'Implementation-Version': artifact_version, \
+            'Implementation-Vendor': 'Gary A. Stafford'
+    }
 }
 
 task copyWar(type: Copy) {
@@ -140,7 +155,7 @@ task copyWar(type: Copy) {
 task zipStatic(type: Zip) {
     from 'src/main/webapp/assets'
     appendix = 'static'
-    //version = ""
+    version = ""
 }
 
 tomcatRun {
