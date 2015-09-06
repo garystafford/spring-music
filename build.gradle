@@ -31,16 +31,6 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 archivesBaseName = 'spring-music'
 
-jar {
-    manifest {
-        attributes \
-            'Implementation-Title': 'Spring Sample Application', \
-            'Implementation-Version': artifact_version
-    }
-    
-    version = ''
-}
-
 buildscript {
     repositories {
         jcenter()
@@ -126,6 +116,16 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = "${gradleVersion}"
+}
+
+jar {
+    manifest {
+        attributes \
+            'Implementation-Title': 'Spring Sample Application', \
+            'Implementation-Version': artifact_version
+    }
+    
+    version = ''
 }
 
 war {
