@@ -1,11 +1,8 @@
 apply plugin: 'java'
-
 apply plugin: 'eclipse-wtp'
 apply plugin: 'idea'
-
 apply plugin: 'tomcat'
 apply plugin: 'war'
-
 apply plugin: 'cloudfoundry'
 
 version = 1.0
@@ -38,9 +35,10 @@ jar {
     manifest {
         attributes \
             'Implementation-Title': 'Spring Sample Application', \
-            'Implementation-Version': version
+            'Implementation-Version': artifact_version
     }
-    //version = ""
+    
+    version = ''
 }
 
 buildscript {
@@ -58,8 +56,8 @@ buildscript {
 
 repositories {
     mavenLocal()
-    maven { url "http://repo.spring.io/release" }
-    maven { url "http://repo.spring.io/milestone" }
+    maven { url 'http://repo.spring.io/release' }
+    maven { url 'http://repo.spring.io/milestone' }
     mavenCentral()
 }
 
@@ -138,7 +136,7 @@ war {
         attributes \
             'Manifest-Version': '1.0', \
             'Created-By': currentJvm, \
-            'Gradle-Version': gradleVersion, \
+            'Gradle-Version': gradleVersionGradleVersion.current().getVersion(), \
             'Implementation-Title': archivesBaseName + '.war', \
             'Implementation-Version': artifact_version, \
             'Implementation-Vendor': 'Gary A. Stafford'
