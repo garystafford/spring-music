@@ -107,7 +107,7 @@ dependencies {
     compile 'org.slf4j:slf4j-log4j12:1.7.2'
 
     // Servlet
-    compile "javax.servlet:jstl:1.2"
+    compile 'javax.servlet:jstl:1.2'
     providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
 
     // Testing
