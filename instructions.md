@@ -20,3 +20,5 @@ bash ./deploy.sh
 
 Links  
 https://docs.gradle.org/current/userguide/working_with_files.html
+
+http://www.codejava.net/coding/common-conversion-patterns-for-log4js-patternlayout
