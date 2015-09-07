@@ -118,17 +118,22 @@ task wrapper(type: Wrapper) {
     gradleVersion = "${gradleVersion}"
 }
 
-jar {
-    manifest {
-        attributes \
-            'Implementation-Title': 'Spring Sample Application', \
-            'Implementation-Version': artifact_version
-    }
-    
+//jar {
+//    manifest {
+//        attributes \
+//            'Implementation-Title': 'Spring Sample Application', \
+//            'Implementation-Version': artifact_version
+//    }
+//    
+//    version = ''
+//}
+
+war {
+    // omit the version from the war file name
     version = ''
 }
 
-war {
+task warNoStatic(type: War) {
     // omit the version from the war file name
     version = ''
     exclude '**/assets/**'
@@ -143,11 +148,15 @@ war {
     }
 }
 
-task copyWar(type: Copy) {
+task warCopy(type: Copy) {
     from 'build/libs'
     into 'build/distributions'
     include '**/*.war'
+}
 
+task zipGetVersion (type: Task) {
+    ext.versionfile = new File("${projectDir}/src/main/webapp/assets/buildinfo.properties")
+    versionfile.text = 'build.version=' + artifact_version
 }
 
 task zipStatic(type: Zip) {
@@ -158,7 +167,7 @@ task zipStatic(type: Zip) {
 
 tomcatRun {
     outputFile = file('tomcat.log')
-    tomcatRun.configFile = file('context.xml')
+    tomcatRun.configFile = file('src/main/webapp/META-INF/context.xml')
 
 }
 
