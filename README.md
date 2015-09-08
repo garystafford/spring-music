@@ -23,7 +23,6 @@ A few changes were necessary to the original Spring Music application to make it
 [![Kibana](https://programmaticponderings.files.wordpress.com/2015/09/kibana-spring-music.png)](https://programmaticponderings.files.wordpress.com/2015/09/kibana-spring-music.png "Kibana")
 
 **Application Technology Stack**
-
 * [Java](http://openjdk.java.net)
 * [Spring Framework](http://projects.spring.io/spring-framework)
 * [NGINX](http://nginx.org)
@@ -65,7 +64,6 @@ Lastly, the ELK Stack with Logspout, will aggregate both Docker and Java Log4j l
 [![Spring Music Application Environment](https://programmaticponderings.files.wordpress.com/2015/09/spring-music-machine.png)](https://programmaticponderings.files.wordpress.com/2015/09/spring-music-machine.png "Spring Music Application Environment")
 
 **Build, Deploy, Host Technology Stack**
-
 * [Gradle](https://gradle.org)
 * [GitHub](https://github.com)
 * [Travis CI](https://travis-ci.org)
@@ -330,7 +328,6 @@ Upstream-Response-Time: 1441648572.266
 
 ### Spring Music Application Links
 Assuming `springmusic` VM is running at `192.168.99.100`:
-
 * Spring Music: [192.168.99.100](http://192.168.99.100)
 * NGINX: [192.168.99.100/nginx_status](http://192.168.99.100/nginx_status)
 * Tomcat Node 1*: [192.168.99.100:8180/manager](http://192.168.99.100:8180/manager)
