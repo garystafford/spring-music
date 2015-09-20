@@ -12,7 +12,7 @@ _Build a multi-container, MongoDB-backed, Java Spring web application, and deplo
 ### Introduction
 In this post, we will demonstrate how to build, deploy, and host a multi-tier Java application using Docker. For the demonstration, we will use a sample Java Spring application, available on GitHub from Cloud Foundry. Cloud Foundry's [Spring Music](https://github.com/cloudfoundry-samples/spring-music) sample record album collection application was originally designed to demonstrate the use of database services on [Cloud Foundry](http://www.cloudfoundry.com) and [Spring Framework](http://www.springframework.org). Instead of Cloud Foundry, we will host the Spring Music application using Docker with VirtualBox and optionally, AWS.
 
-All files for this post can be found in the `master` branch of the [GitHub](https://github.com/garystafford/spring-music-docker/tree/master) Repository. Instructions are below.
+All files required to build this post's demonstration are located in the `master` branch of this [GitHub](https://github.com/garystafford/spring-music-docker/tree/master) repository. Instructions to clone the repository are below. The Java Spring Music application's source code, used in this post's demonstration, is located in the `master` branch of this [GitHub](https://github.com/garystafford/spring-music/tree/master) repository.
 
 <a href="https://programmaticponderings.files.wordpress.com/2015/09/spring-music.png"><img src="https://programmaticponderings.files.wordpress.com/2015/09/spring-music.png?w=620" alt="Spring Music" width="620" height="364" class="aligncenter size-large wp-image-6011" style="border:0 solid #ffffff;" /></a>
 
@@ -86,7 +86,7 @@ To build, deploy, and host the Java Spring Music application, we will use the fo
 
 All files necessary to build this project are stored in the [garystafford/spring-music-docker](https://github.com/garystafford/spring-music-docker) repository on GitHub. The Spring Music source code and build artifacts are stored in a seperate [garystafford/spring-music](https://github.com/garystafford/spring-music) repository, also on GitHub.
 
-Build artifacts are automatically built by [Travis CI](https://travis-ci.org) when changes are checked into the [garystafford/spring-music](https://github.com/garystafford/spring-music) repository on GitHub. Travis CI then overwrites the build artifacts back to a [build artifact](https://github.com/garystafford/spring-music/tree/build-artifacts) branch of that same project. The build artifact branch acts as a pseudo [binary repository](https://en.wikipedia.org/wiki/Binary_repository_manager) for the project. The `.travis.yaml` file, `gradle.build` file, and `deploy.sh` script handles these functions.
+Build artifacts are automatically built by [Travis CI](https://travis-ci.org) when changes are checked into the [garystafford/spring-music](https://github.com/garystafford/spring-music) repository on GitHub. Travis CI then overwrites the build artifacts back to a [build artifact](https://github.com/garystafford/spring-music/tree/build-artifacts) branch of that same project. The build artifact branch acts as a pseudo [binary repository](https://en.wikipedia.org/wiki/Binary_repository_manager) for the project. The `.travis.yaml` file`gradle.build` file, and `deploy.sh` script handles these functions.
 
 .travis.yaml file:
 ```yaml
@@ -166,38 +166,31 @@ git commit -m "Deploy Travis CI build #${TRAVIS_BUILD_NUMBER} artifacts to GitHu
 # Force push from the current repo's master branch to the remote
 # repo's build-artifacts branch. (All previous history on the gh-pages branch
 # will be lost, since we are overwriting it.) We redirect any output to
-# /dev/null to hide any sensitive credential data that might otherwise be exposed. Environment variables pre-configured on Travis CI.
+# /dev/null to hide any sensitive credential data that might otherwise be exposed.
+# Environment variables pre-configured on Travis CI.
 git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:build-artifacts > /dev/null 2>&1
 ```
+Base Docker images, such as NGINX, Tomcat, and MongoDB, used to build the project's images and subsequently the containers, are all pulled from Docker Hub.
 
-This project then pulls the latest build artifacts down, to build the project-specific versions of the NGINX and Tomcat Docker images used for this project. For this we use the `pull_build_artifacts.sh` script:
-```bash
-#!/bin/sh
+This NGINX and Tomcat Dockerfiles pull the latest build artifacts down to build the project-specific versions of the NGINX and Tomcat Docker images used for this project. For example, the NGINX `Dockerfile` looks like:
+```text
+# NGINX image with build artifact
 
-echo "Removing all existing build artifacts"
-rm -rf build-artifacts
-rm -rf nginx/build-artifacts/
-rm -rf tomcat/build-artifacts/
+FROM nginx:latest
 
-mkdir nginx/build-artifacts
-mkdir tomcat/build-artifacts
+MAINTAINER Gary A. Stafford <garystafford@rochester.rr.com>
 
-echo "Pulling latest build artficats"
-git clone https://github.com/garystafford/spring-music.git 
-  --branch build-artifacts 
-  --single-branch build-artifacts
+ENV REFRESHED_AT 2015-09-20
+ENV GITHUB_REPO https://github.com/garystafford/spring-music/raw/build-artifacts
+ENV STATIC_FILE spring-music-static.zip
 
-echo "Moving build artifacts to each microservice directory"
-mv build-artifacts/*.war tomcat/build-artifacts/
-mv build-artifacts/*.zip nginx/build-artifacts/
+RUN apt-get update -y && \
+  apt-get install wget unzip nano -y && \
+  wget -O /tmp/${STATIC_FILE} ${GITHUB_REPO}/${STATIC_FILE} && \
+  unzip /tmp/${STATIC_FILE} -d /usr/share/nginx/assets/
 
-echo "Removing local clone of build artifacts repo"
-rm -rf build-artifacts
-
-echo "Pulling build artifacts complete"
+COPY default.conf /etc/nginx/conf.d/default.conf
 ```
-
-Docker Images, such as NGINX, Tomcat, and MongoDB, used to build the project's images, and subsequently the containers, are all pulled from Docker Hub.
 
 Docker Machine builds a single VirtualBox VM. After building the VM, Docker Compose then builds and deploys (1) NGINX container, (2) load-balanced Tomcat containers, (1) MongoDB container, (1) ELK container, and (1) Logspout container, onto the VM. Docker Machine's VirtualBox driver provides a basic solution that can be run locally for testing and development. The `docker-compose.yml` for the project is as follows:
 ```yaml
@@ -259,25 +252,26 @@ curl --version && git --version
 
 All of the below commands may be executed with the following single command (`sh ./build_project.sh`). This is useful for working with [Jenkins CI](https://jenkins-ci.org/), [ThoughtWorks go](http://www.thoughtworks.com/products/go-continuous-delivery), or similar CI tools. However, I suggest building the project step-by-step, as shown below, to better understand the process.
 ```bash
-git clone https://github.com/garystafford/spring-music-docker.git && 
+# clone project
+git clone -b master \
+  --single-branch https://github.com/garystafford/spring-music-docker.git && 
 cd spring-music-docker
 
 # build VM
 docker-machine create --driver virtualbox springmusic --debug
-All of the below commands may be executed with the following single command (`sh ./build_project.sh`). This is useful for working with [Jenkins CI](https://jenkins-ci.org/), [ThoughtWorks go](http://www.thoughtworks.com/products/go-continuous-delivery), or similar CI tools. However, I suggest building the project step-by-step, as shown below, to better understand the process.
 
 # create diectory to store mongo data on host
 docker ssh springmusic mkdir /opt/mongodb
 
 # set new environment
-docker-machine env springmusic && 
+docker-machine env springmusic && \
 eval "$(docker-machine env springmusic)"
-
-# pull build artifacts from other repo, built by Travis CI
-sh ./pull_build_artifacts.sh
 
 # build images and containers
 docker-compose -f docker-compose.yml -p music up -d
+
+# configure local DNS resolution for application URL
+#echo "$(docker-machine ip springmusic)   springmusic.com" | sudo tee --append /etc/hosts
 
 # wait for container apps to start
 sleep 15
@@ -293,7 +287,7 @@ By simply changing the driver to AWS EC2 and providing your AWS credentials, the
 
 **Results**
 Resulting Docker images and containers:
-```text
+```shell
 gstafford@gstafford-X555LA:$ docker images
 REPOSITORY            TAG                 IMAGE ID            CREATED              VIRTUAL SIZE
 music_proxy           latest              46af4c1ffee0        52 seconds ago       144.5 MB
@@ -318,7 +312,7 @@ cbfe43800f3e        music_elk           "/usr/bin/supervisord"   2 minutes ago  
 ```
 
 Partial result of the curl test, calling NGINX. Note the two different upstream addresses for Tomcat. Also, note the sharp decrease in request times, due to caching.
-```text
+```
 HTTP/1.1 200 OK
 Server: nginx/1.9.4
 Date: Mon, 07 Sep 2015 17:56:11 GMT
@@ -329,8 +323,8 @@ Accept-Ranges: bytes
 ETag: W/"2090-1441648256000"
 Last-Modified: Mon, 07 Sep 2015 17:50:56 GMT
 Content-Language: en
-Request-Time: 0.521 <--
-Upstream-Address: 172.17.0.121:8080 <--
+Request-Time: 0.521
+Upstream-Address: 172.17.0.121:8080
 Upstream-Response-Time: 1441648570.774
 
 HTTP/1.1 200 OK
@@ -343,8 +337,8 @@ Accept-Ranges: bytes
 ETag: W/"2090-1441648256000"
 Last-Modified: Mon, 07 Sep 2015 17:50:56 GMT
 Content-Language: en
-Request-Time: 0.326 <--
-Upstream-Address: 172.17.0.123:8080 <--
+Request-Time: 0.326
+Upstream-Address: 172.17.0.123:8080
 Upstream-Response-Time: 1441648571.506
 
 HTTP/1.1 200 OK
@@ -357,7 +351,7 @@ Accept-Ranges: bytes
 ETag: W/"2090-1441648256000"
 Last-Modified: Mon, 07 Sep 2015 17:50:56 GMT
 Content-Language: en
-Request-Time: 0.006 <--
+Request-Time: 0.006
 Upstream-Address: 172.17.0.121:8080
 Upstream-Response-Time: 1441648572.050
 
@@ -371,7 +365,7 @@ Accept-Ranges: bytes
 ETag: W/"2090-1441648256000"
 Last-Modified: Mon, 07 Sep 2015 17:50:56 GMT
 Content-Language: en
-Request-Time: 0.006 <--
+Request-Time: 0.006
 Upstream-Address: 172.17.0.123:8080
 Upstream-Response-Time: 1441648572.266
 ```
