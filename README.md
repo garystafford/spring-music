@@ -1,3 +1,5 @@
+[![Build Status](https://semaphoreci.com/api/v1/projects/eed90706-8a71-4b8a-ae7f-3519df02b67d/532587/badge.svg)](https://semaphoreci.com/garystafford/spring-music)
+
 _Build a multi-container, MongoDB-backed, Java Spring web application, and deploy to a test environment using Docker._
 
 <a href="https://programmaticponderings.files.wordpress.com/2015/09/spring-music-diagram.png"><img src="https://programmaticponderings.files.wordpress.com/2015/09/spring-music-diagram.png" alt="Spring Music Diagram" width="567" height="254" class="aligncenter size-full wp-image-6110" style="border:0 solid #ffffff;" /></a>
