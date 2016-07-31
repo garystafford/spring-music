@@ -26,4 +26,4 @@ git commit -m "Deploy Travis CI build #${TRAVIS_BUILD_NUMBER} artifacts to GitHu
 # export GH_TOKEN=721fd28bc24dedf553c9ecb6e6c2f137fffb8b5f
 # travis encrypt GH_TOKEN=721fd28bc24dedf553c9ecb6e6c2f137fffb8b5f --add
 # export GH_REF=github.com/garystafford/spring-music.git
-git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" springmusic_v2:build-artifacts > /dev/null 2>&1
+git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:build-artifacts > /dev/null 2>&1
