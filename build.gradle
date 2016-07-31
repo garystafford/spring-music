@@ -59,7 +59,7 @@ dependencies {
     // Spring Data
     compile 'org.springframework.data:spring-data-jpa:1.5.2.RELEASE'
     compile 'org.springframework.data:spring-data-redis:1.4.2.RELEASE'
-    compile 'org.springframework.data:spring-data-mongodb:1.4.2.RELEASE'
+    compile group: 'org.springframework.data', name: 'spring-data-mongodb', version: '1.9.2.RELEASE'
 
     // JPA Persistence
     compile 'commons-dbcp:commons-dbcp:1.2.2'
@@ -89,8 +89,8 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
 
     // Logging
-    compile 'org.slf4j:slf4j-api:1.7.2'
-    compile 'org.slf4j:slf4j-log4j12:1.7.2'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.12'
 
     // Servlet
     compile 'javax.servlet:jstl:1.2'
