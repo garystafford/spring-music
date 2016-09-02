@@ -3,24 +3,24 @@
 
 `git clone https://github.com/cloudfoundry-samples/spring-music.git`
 
-### Run
+### Run Locally
 To run locally with Mongo
 `sh ./gradlew clean build tomcatRun -Dspring.profiles.active=mongodb -Dmongodb.url=127.0.0.1`
 
 To kill running app locally if necessary
 `kill $(ps aux | grep 'GradleDaemon' | awk '{print $2}')`
 
-### Build
-To build and distribute .zip and .war
-```bash
-sh ./gradlew clean war copyWar zipStatic && \
-sh ./deploy.sh
-```
-
-### Test
+### Test Locally
 ```bash
 curl -X GET -I --url http://localhost:8080/spring-music
 curl -X GET --url http://localhost:8080/spring-music
+```
+
+### Build and Publish to GitHub
+To build and publish .zip and .war
+```bash
+sh ./gradlew clean war warCopy zipStatic && \
+sh ./deploy.sh
 ```
 
 ### Links
