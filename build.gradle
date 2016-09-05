@@ -10,7 +10,7 @@ version = 1.0
 // versioning build artifacts
 def major = '1'
 def minor = "${System.env.TRAVIS_BUILD_NUMBER}"
-minor = (minor!='null') ? minor : '0'
+minor = (minor != 'null') ? minor : '0'
 def artifact_version = major + '.' + minor
 
 def currentJvm = org.gradle.internal.jvm.Jvm.current()
@@ -44,10 +44,15 @@ buildscript {
 }
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
 dependencies {
+    compile group: 'org.springframework', name: 'spring-test', version: "${springVersion}"
+    compile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
+
     // Spring and dependencies
     compile "org.springframework:spring-context:${springVersion}"
     compile "org.springframework:spring-webmvc:${springVersion}"
@@ -97,7 +102,7 @@ dependencies {
     providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
 
     // Testing
-    testCompile 'junit:junit:4.8.2'
+    compile group: 'junit', name: 'junit', version: '4.12'
 
     // Spring Testing
     testCompile "org.springframework:spring-test:${springVersion}"
@@ -110,20 +115,6 @@ dependencies {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = "${gradleVersion}"
-}
-
-//jar {
-//    manifest {
-//        attributes \
-//            'Implementation-Title': 'Spring Sample Application', \
-//            'Implementation-Version': artifact_version
-//    }
-//    
-//    version = ''
-//}
-
 war {
     // omit the version from the war file name
     version = ''
@@ -134,13 +125,13 @@ task warNoStatic(type: War) {
     version = ''
     exclude '**/assets/**'
     manifest {
-        attributes \
-            'Manifest-Version': '1.0', \
-            'Created-By': currentJvm, \
-            'Gradle-Version': GradleVersion.current().getVersion(), \
-            'Implementation-Title': archivesBaseName + '.war', \
-            'Implementation-Version': artifact_version, \
-            'Implementation-Vendor': 'Gary A. Stafford'
+        attributes  \
+               'Manifest-Version': '1.0',  \
+               'Created-By': currentJvm,  \
+               'Gradle-Version': GradleVersion.current().version,  \
+               'Implementation-Title': archivesBaseName + '.war',  \
+               'Implementation-Version': artifact_version,  \
+               'Implementation-Vendor': 'Gary A. Stafford'
     }
 }
 
@@ -150,7 +141,7 @@ task warCopy(type: Copy) {
     include '**/*.war'
 }
 
-task zipGetVersion (type: Task) {
+task zipGetVersion(type: Task) {
     ext.versionfile = new File("${projectDir}/src/main/webapp/assets/buildinfo.properties")
     versionfile.text = 'build.version=' + artifact_version
 }
@@ -164,7 +155,6 @@ task zipStatic(type: Zip) {
 tomcatRun {
     outputFile = file('tomcat.log')
     tomcatRun.configFile = file('src/main/webapp/META-INF/context.xml')
-
 }
 
 cloudfoundry {
