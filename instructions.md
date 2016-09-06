@@ -19,7 +19,7 @@ curl -X GET --url http://localhost:8080/spring-music
 ### Build and Publish to GitHub
 To build and publish .zip and .war
 ```bash
-sh ./gradlew clean war warCopy zipStatic && \
+sh ./gradlew clean build warNoStatic warCopy zipGetVersion zipStatic && \
 sh ./deploy.sh
 ```
 
