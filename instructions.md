@@ -23,7 +23,7 @@ sh ./gradlew clean build warNoStatic warCopy zipGetVersion zipStatic && \
 sh ./deploy.sh
 ```
 
-### Links
+### Links 
 [https://docs.gradle.org/current/userguide/working_with_files.html](https://docs.gradle.org/current/userguide/working_with_files.html)
 [http://www.codejava.net/coding/common-conversion-patterns-for-log4js-patternlayout](http://www.codejava.net/coding/common-conversion-patterns-for-log4js-patternlayout)
 [http://help.papertrailapp.com/kb/configuration/java-log4j-logging](http://help.papertrailapp.com/kb/configuration/java-log4j-logging)
