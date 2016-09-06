@@ -5,8 +5,9 @@ before_install:
 before_deploy:
 - chmod ugo+x deploy.sh
 script:
-- bash ./gradlew clean build warNoStatic warCopy zipGetVersion zipStatic
-- bash ./deploy.sh
+- sh ./gradlew clean build
+- sh ./gradlew warNoStatic warCopy zipGetVersion zipStatic
+- sh ./deploy.sh
 env:
   global:
   - GH_REF: github.com/garystafford/spring-music.git
