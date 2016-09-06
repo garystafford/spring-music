@@ -5,31 +5,23 @@ import org.cloudfoundry.samples.music.repositories.AlbumRepository;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.servlet.ServletException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
-@WebAppConfiguration
-@ContextHierarchy({
-        @ContextConfiguration(classes = org.cloudfoundry.samples.music.config.AppInitializer.class),
-        @ContextConfiguration(classes = org.cloudfoundry.samples.music.config.SpringApplicationContextInitializer.class)
-})
-@ActiveProfiles("mongodb")
-@org.junit.Ignore
 public class AlbumControllerTest {
     @Mock
     private AlbumRepository repository;
@@ -40,13 +32,7 @@ public class AlbumControllerTest {
     private MockMvc mockMvc;
 
     @org.junit.Before
-    public void initMocks() {
-        MockitoAnnotations.initMocks(this);
-    }
-
-    @org.junit.Before
     public void setup() throws ServletException {
-        this.albumController = new AlbumController(repository);
         this.mockMvc = MockMvcBuilders.standaloneSetup(albumController).build();
     }
 
@@ -56,6 +42,12 @@ public class AlbumControllerTest {
 
     @org.junit.Test
     public void testAlbums() throws Exception {
+        List<Album> albums = new ArrayList<>();
+        albums.add(new Album("test_findAll_title1", "test_findAll_artist1", "2001", "test_findAll_genre1"));
+        albums.add(new Album("test_findAll_title2", "test_findAll_artist2", "2002", "test_findAll_genre2"));
+
+        when(repository.findAll()).thenReturn(albums);
+
         this.mockMvc.perform(get("/albums")
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
@@ -64,30 +56,56 @@ public class AlbumControllerTest {
 
     @org.junit.Test
     public void testGetById() throws Exception {
+        Album album = new Album("test_findOne_title", "test_findOne_artist", "2000", "test_findOne_genre");
+        album.setId("579df5ecbee8acbe920ab488");
+
+        when(repository.findOne(any())).thenReturn(album);
+
         this.mockMvc.perform(get("/albums/579df5ecbee8acbe920ab488")
-                .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @org.junit.Test
     public void testAdd() throws Exception {
-        Album album = new Album("title", "artist", "1999", "genre");
-        this.mockMvc.perform(post("/albums", album)
-                .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-                .andExpect(status().is4xxClientError())
+        Album album = new Album("test_add_title", "test_add_artist", "2000", "test_add_genre");
+        ObjectMapper mapper = new ObjectMapper();
+        String album_json = mapper.writeValueAsString(album);
+
+        when(repository.save(any(Album.class))).thenReturn(album);
+
+        this.mockMvc.perform(post("/albums").content(album_json)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 
-    @org.junit.Ignore
     @org.junit.Test
     public void testUpdate() throws Exception {
+        Album album = new Album("test_update_title", "test_update_artist", "2000", "test_update_genre");
+        album.setId("579df5ecbee8acbe920ab48c");
+        ObjectMapper mapper = new ObjectMapper();
+        String album_json = mapper.writeValueAsString(album);
 
+        when(repository.save(any(Album.class))).thenReturn(album);
+
+        // AlbumController.update is actually a HTTP.POST with Id, not an HTTP.PUT or HTTP.PATCH...
+        this.mockMvc.perform(post("/albums").content(album_json)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
-    @org.junit.Ignore
     @org.junit.Test
     public void testDeleteById() throws Exception {
-
+        this.mockMvc.perform(delete("/albums/579df5ecbee8acbe920ab48d")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }
