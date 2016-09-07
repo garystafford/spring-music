@@ -2,6 +2,9 @@ package org.cloudfoundry.samples.music.web.controllers;
 
 import org.cloudfoundry.samples.music.domain.Album;
 import org.cloudfoundry.samples.music.repositories.AlbumRepository;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,16 +34,16 @@ public class AlbumControllerTest {
 
     private MockMvc mockMvc;
 
-    @org.junit.Before
+    @Before
     public void setup() throws ServletException {
         this.mockMvc = MockMvcBuilders.standaloneSetup(albumController).build();
     }
 
-    @org.junit.After
+    @After
     public void tearDown() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void testAlbums() throws Exception {
         List<Album> albums = new ArrayList<>();
         albums.add(new Album("test_findAll_title1", "test_findAll_artist1", "2001", "test_findAll_genre1"));
@@ -49,12 +52,13 @@ public class AlbumControllerTest {
         when(repository.findAll()).thenReturn(albums);
 
         this.mockMvc.perform(get("/albums")
-                .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
-    @org.junit.Test
+    @Test
     public void testGetById() throws Exception {
         Album album = new Album("test_findOne_title", "test_findOne_artist", "2000", "test_findOne_genre");
         album.setId("579df5ecbee8acbe920ab488");
@@ -68,7 +72,7 @@ public class AlbumControllerTest {
                 .andDo(print());
     }
 
-    @org.junit.Test
+    @Test
     public void testAdd() throws Exception {
         Album album = new Album("test_add_title", "test_add_artist", "2000", "test_add_genre");
         ObjectMapper mapper = new ObjectMapper();
@@ -83,7 +87,7 @@ public class AlbumControllerTest {
                 .andDo(print());
     }
 
-    @org.junit.Test
+    @Test
     public void testUpdate() throws Exception {
         Album album = new Album("test_update_title", "test_update_artist", "2000", "test_update_genre");
         album.setId("579df5ecbee8acbe920ab48c");
@@ -100,7 +104,7 @@ public class AlbumControllerTest {
                 .andDo(print());
     }
 
-    @org.junit.Test
+    @Test
     public void testDeleteById() throws Exception {
         this.mockMvc.perform(delete("/albums/579df5ecbee8acbe920ab48d")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
