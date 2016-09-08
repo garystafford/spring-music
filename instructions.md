@@ -5,21 +5,21 @@
 
 ### Run Locally
 To run locally with Mongo
-`sh ./gradlew clean build tomcatRun -Dspring.profiles.active=mongodb -Dmongodb.url=127.0.0.1`
+`./gradlew clean build tomcatRun -Dspring.profiles.active=mongodb -Dmongodb.url=127.0.0.1`
 
 To kill running app locally if necessary
 `kill $(ps aux | grep 'GradleDaemon' | awk '{print $2}')`
 
 ### Test Locally
 ```bash
-curl -X GET -I --url http://localhost:8080/spring-music
+curl -X GET -I --url http://localhost:8080/spring-music # headers only
 curl -X GET --url http://localhost:8080/spring-music
 ```
 
 ### Build and Publish to GitHub
 To build and publish .zip and .war
 ```bash
-sh ./gradlew clean build warNoStatic warCopy zipGetVersion zipStatic && \
+./gradlew clean build warNoStatic warCopy zipGetVersion zipStatic && \
 sh ./deploy.sh
 ```
 
