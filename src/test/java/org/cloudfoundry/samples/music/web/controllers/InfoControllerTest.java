@@ -1,6 +1,5 @@
 package org.cloudfoundry.samples.music.web.controllers;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +19,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class InfoControllerTest {
 
@@ -37,25 +35,31 @@ public class InfoControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(infoController).build();
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void testInfo() throws Exception {
         String[] profiles = new String[]{"test_profile_1", "test_profile_2"};
-        when(springEnvironment.getActiveProfiles()).thenReturn(profiles);
+//        String[] services = new String[0];
+//        ArrayList<String[]> expectedRespose = new ArrayList<>();
+//        expectedRespose.add(profiles);
+//        expectedRespose.add(services);
+//        ObjectMapper mapper = new ObjectMapper();
+//        String expectedRespose_json = mapper.writeValueAsString(expectedRespose);
 
-        this.mockMvc.perform(get("/info")
+        when(springEnvironment.getActiveProfiles()).thenReturn(profiles);
+        String expectedRespose = "{\"profiles\":[\"test_profile_1\",\"test_profile_2\"],\"services\":[]}";
+
+        MvcResult result = this.mockMvc.perform(get("/info")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(header().string("Content-Type", MediaType.APPLICATION_JSON_UTF8.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.profiles[0]", is("test_profile_1")))
+                .andExpect(jsonPath("$.profiles[1]", is("test_profile_2")))
                 .andDo(print())
                 .andReturn();
+
+        Assert.assertEquals(expectedRespose, result.getResponse().getContentAsString());
     }
 
     @Test
@@ -83,6 +87,6 @@ public class InfoControllerTest {
                 .andDo(print())
                 .andReturn();
 
-        Assert.assertEquals(result.getResponse().getContentAsString(), "[]");
+        Assert.assertEquals("[]", result.getResponse().getContentAsString());
     }
 }
