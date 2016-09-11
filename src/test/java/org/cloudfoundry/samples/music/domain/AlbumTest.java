@@ -27,7 +27,7 @@ public class AlbumTest {
 
     @Test
     public void testGetId() throws Exception {
-        Assert.assertNull(null, getAlbum.getId());
+        Assert.assertNull(getAlbum.getId());
     }
 
     @Test
