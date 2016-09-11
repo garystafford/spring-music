@@ -1,5 +1,6 @@
 package org.cloudfoundry.samples.music.web.controllers;
 
+import org.cloudfoundry.samples.music.domain.ApplicationInfo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -38,15 +40,12 @@ public class InfoControllerTest {
     @Test
     public void testInfo() throws Exception {
         String[] profiles = new String[]{"test_profile_1", "test_profile_2"};
-//        String[] services = new String[0];
-//        ArrayList<String[]> expectedRespose = new ArrayList<>();
-//        expectedRespose.add(profiles);
-//        expectedRespose.add(services);
-//        ObjectMapper mapper = new ObjectMapper();
-//        String expectedRespose_json = mapper.writeValueAsString(expectedRespose);
+        String[] services = new String[0];
+        ApplicationInfo applicationInfo = new ApplicationInfo(profiles, services);
+        ObjectMapper mapper = new ObjectMapper();
+        String applicationInfo_json = mapper.writeValueAsString(applicationInfo);
 
         when(springEnvironment.getActiveProfiles()).thenReturn(profiles);
-        String expectedRespose = "{\"profiles\":[\"test_profile_1\",\"test_profile_2\"],\"services\":[]}";
 
         MvcResult result = this.mockMvc.perform(get("/info")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -59,7 +58,7 @@ public class InfoControllerTest {
                 .andDo(print())
                 .andReturn();
 
-        Assert.assertEquals(expectedRespose, result.getResponse().getContentAsString());
+        Assert.assertEquals(applicationInfo_json, result.getResponse().getContentAsString());
     }
 
     @Test

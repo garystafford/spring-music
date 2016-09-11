@@ -21,7 +21,7 @@ public class AlbumTest {
         getAlbum = new Album(title, artist, releaseYear, genre);
         getAlbum.setTrackCount(trackCount);
         getAlbum.setAlbumId(albumId);
-        
+
         setAlbum = new Album();
     }
 
@@ -38,6 +38,7 @@ public class AlbumTest {
     @Test
     public void testSetTitle() throws Exception {
         setAlbum.setTitle(title);
+
         Assert.assertEquals(title, setAlbum.getTitle());
     }
 
@@ -49,6 +50,7 @@ public class AlbumTest {
     @Test
     public void testSetArtist() throws Exception {
         setAlbum.setArtist(artist);
+
         Assert.assertEquals(artist, setAlbum.getArtist());
     }
 
@@ -60,6 +62,7 @@ public class AlbumTest {
     @Test
     public void testSetReleaseYear() throws Exception {
         setAlbum.setReleaseYear(releaseYear);
+
         Assert.assertEquals(releaseYear, setAlbum.getReleaseYear());
     }
 
@@ -71,6 +74,7 @@ public class AlbumTest {
     @Test
     public void testSetGenre() throws Exception {
         setAlbum.setGenre(genre);
+
         Assert.assertEquals(genre, setAlbum.getGenre());
     }
 
@@ -82,6 +86,7 @@ public class AlbumTest {
     @Test
     public void testSetTrackCount() throws Exception {
         setAlbum.setTrackCount(trackCount);
+
         Assert.assertEquals(trackCount, setAlbum.getTrackCount());
     }
 
@@ -93,6 +98,7 @@ public class AlbumTest {
     @Test
     public void testSetAlbumId() throws Exception {
         setAlbum.setAlbumId(albumId);
+
         Assert.assertEquals(albumId, setAlbum.getAlbumId());
     }
 }

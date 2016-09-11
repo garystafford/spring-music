@@ -35,12 +35,14 @@ public class RandomIdGeneratorTest {
     public void testGenerate() throws Exception {
         Serializable serializable = randomIdGenerator.generate(session, object);
         String generatedId = serializable.toString();
+
         Assert.assertEquals(RANDOMLY_GENERATED_UUID_VERSION, UUID.fromString(generatedId).version());
     }
 
     @Test
     public void testGenerateId() throws Exception {
         String generatedId = randomIdGenerator.generateId();
+
         Assert.assertEquals(RANDOMLY_GENERATED_UUID_VERSION, UUID.fromString(generatedId).version());
     }
 }
