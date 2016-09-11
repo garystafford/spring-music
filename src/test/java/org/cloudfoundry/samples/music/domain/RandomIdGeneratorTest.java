@@ -4,14 +4,11 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.Serializable;
 import java.util.UUID;
 
-@RunWith(MockitoJUnitRunner.class)
 public class RandomIdGeneratorTest {
 
     // UUID version 4 = Randomly generated UUID
@@ -36,13 +33,17 @@ public class RandomIdGeneratorTest {
         Serializable serializable = randomIdGenerator.generate(session, object);
         String generatedId = serializable.toString();
 
-        Assert.assertEquals(RANDOMLY_GENERATED_UUID_VERSION, UUID.fromString(generatedId).version());
+        // does method return a valid, randomly generated UUID
+        Assert.assertEquals(RANDOMLY_GENERATED_UUID_VERSION,
+                UUID.fromString(generatedId).version());
     }
 
     @Test
     public void testGenerateId() throws Exception {
         String generatedId = randomIdGenerator.generateId();
 
-        Assert.assertEquals(RANDOMLY_GENERATED_UUID_VERSION, UUID.fromString(generatedId).version());
+        // does method return a valid, randomly generated UUID
+        Assert.assertEquals(RANDOMLY_GENERATED_UUID_VERSION,
+                UUID.fromString(generatedId).version());
     }
 }

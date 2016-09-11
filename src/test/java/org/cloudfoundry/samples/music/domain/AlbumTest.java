@@ -1,13 +1,29 @@
 package org.cloudfoundry.samples.music.domain;
 
+import org.hibernate.engine.spi.SessionImplementor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 public class AlbumTest {
     private String title, artist, releaseYear, genre, albumId;
     private int trackCount;
     private Album getAlbum, setAlbum;
+
+    // UUID version 4 = Randomly generated UUID
+    public static final int RANDOMLY_GENERATED_UUID_VERSION = 4;
+
+    @Mock
+    private SessionImplementor session;
+
+    @Mock
+    private Object object;
+
+    private RandomIdGenerator randomIdGenerator;
 
     @Before
     public void setUp() throws Exception {
@@ -18,7 +34,11 @@ public class AlbumTest {
         albumId = "test_albumId";
         trackCount = 10;
 
+        randomIdGenerator = new RandomIdGenerator();
+        Serializable serializable = randomIdGenerator.generate(session, object);
+
         getAlbum = new Album(title, artist, releaseYear, genre);
+        getAlbum.setId(serializable.toString());
         getAlbum.setTrackCount(trackCount);
         getAlbum.setAlbumId(albumId);
 
@@ -27,7 +47,9 @@ public class AlbumTest {
 
     @Test
     public void testGetId() throws Exception {
-        Assert.assertNull(getAlbum.getId());
+        // does method return a valid, randomly generated UUID
+        Assert.assertEquals(RANDOMLY_GENERATED_UUID_VERSION,
+                UUID.fromString(getAlbum.getId()).version());
     }
 
     @Test
