@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -27,7 +27,7 @@ public class RedisConfig {
         template.setConnectionFactory(redisConnectionFactory);
 
         RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        RedisSerializer<Album> albumSerializer = new JacksonJsonRedisSerializer<Album>(Album.class);
+        RedisSerializer<Album> albumSerializer = new Jackson2JsonRedisSerializer<Album>(Album.class);
 
         template.setKeySerializer(stringSerializer);
         template.setValueSerializer(albumSerializer);

@@ -1,7 +1,7 @@
 package org.cloudfoundry.samples.music.config.data;
 
 import org.cloudfoundry.samples.music.domain.Album;
-import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -34,7 +34,7 @@ public abstract class AbstractJpaRepositoryConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan(Album.class.getPackage().getName());
-        em.setPersistenceProvider(new HibernatePersistence());
+        em.setPersistenceProvider(new HibernatePersistenceProvider());
         em.setJpaPropertyMap(properties);
         return em;
     }

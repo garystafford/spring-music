@@ -5,6 +5,7 @@
 
 ### Run Locally
 To run locally with Mongo
+`./gradlew wrapper`
 `./gradlew clean build tomcatRun -Dspring.profiles.active=mongodb -Dmongodb.url=127.0.0.1`
 
 To kill running app locally if necessary
