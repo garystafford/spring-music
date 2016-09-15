@@ -4,8 +4,10 @@
 `git clone https://github.com/cloudfoundry-samples/spring-music.git`
 
 ### Run Locally
-To run locally with Mongo
+One 1x
 `./gradlew wrapper`
+
+To run locally with Mongo
 `./gradlew clean build tomcatRun -Dspring.profiles.active=mongodb -Dmongodb.url=127.0.0.1`
 
 To kill running app locally if necessary
