@@ -5,10 +5,8 @@ apply plugin: 'tomcat'
 apply plugin: 'war'
 apply plugin: 'cloudfoundry'
 
-version = 1.0
-
 // build artifacts version
-def major = '1'
+def major = '2'
 def minor = System.env.TRAVIS_BUILD_NUMBER
 minor = (minor != 'null') ? minor : System.env.SEMAPHORE_BUILD_NUMBER
 minor = (minor != 'null') ? minor : '0'
@@ -126,12 +124,12 @@ task warNoStatic(type: War) {
     exclude '**/assets/**'
     manifest {
         attributes    \
-                 'Manifest-Version': '1.0',    \
-                 'Created-By': currentJvm,    \
-                 'Gradle-Version': GradleVersion.current().version,    \
-                 'Implementation-Title': archivesBaseName + '.war',    \
-                 'Implementation-Version': artifact_version,    \
-                 'Implementation-Vendor': 'Gary A. Stafford'
+            'Manifest-Version': '1.0',    \
+            'Created-By': currentJvm,    \
+            'Gradle-Version': GradleVersion.current().version,    \
+            'Implementation-Title': archivesBaseName + '.war',    \
+            'Implementation-Version': artifact_version,    \
+            'Implementation-Vendor': 'Gary A. Stafford'
     }
 }
 
