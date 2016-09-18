@@ -5,8 +5,9 @@ before_install:
 before_deploy:
 - chmod ugo+x deploy.sh
 script:
-- "./gradlew clean build"
-- "./gradlew warNoStatic warCopy zipGetVersion zipStatic"
+- ./gradlew wrapper
+- ./gradlew clean build
+- ./gradlew warNoStatic warCopy zipGetVersion zipStatic
 - sh ./deploy_travisci.sh
 env:
   global:
