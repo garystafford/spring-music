@@ -5,7 +5,7 @@ apply plugin: 'tomcat'
 apply plugin: 'war'
 apply plugin: 'cloudfoundry'
 
-// build artifacts version
+// versioning build artifacts
 def major = '2'
 def minor = System.env.TRAVIS_BUILD_NUMBER
 minor = (minor != 'null') ? minor : System.env.SEMAPHORE_BUILD_NUMBER
@@ -154,7 +154,7 @@ task zipStatic(type: Zip) {
     version = ''
 }
 
-tomcatRun {
+tomcatRunLocal {
     outputFile = file('tomcat.log')
     configFile = file('src/main/webapp/META-INF/context.xml')
 }

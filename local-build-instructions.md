@@ -12,7 +12,7 @@ One 1x to update Gradle version
 
 To run locally with Mongo
 ```bash
-./gradlew clean build tomcatRun -Dspring.profiles.active=mongodb -Dmongodb.url=127.0.0.1
+./gradlew clean build tomcatRunLocal -Dspring.profiles.active=mongodb -Dmongodb.url=127.0.0.1
 ```
 
 To kill running app locally if necessary
