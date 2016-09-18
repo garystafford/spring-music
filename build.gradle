@@ -154,7 +154,7 @@ task zipStatic(type: Zip) {
     version = ''
 }
 
-tomcatRunLocal {
+tomcatRun {
     outputFile = file('tomcat.log')
     configFile = file('src/main/webapp/META-INF/context.xml')
 }
